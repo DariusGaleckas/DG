@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <button class="buttonStart" onclick="createTimer()">Play the game</button>
+      <div class="final"></div>
+      <div class="start">
+        <div class="text">
+          <li>Rezultatas</li>
+        </div>
+        <div class="bigBox">
+          <div class="timer">10</div>
+          <div class="smallBox"></div>
+        </div>
+      </div>
+    </div>
+    <script>
+              function rand(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1) + min);
+      }
+
+      const button = document.querySelector("button");
+      const start = document.querySelector(".start");
+      const box = document.querySelector(".smallBox");
+      const result = document.querySelector("li");
+      const final = document.querySelector(".final");
+
+      let second = 10;
+      let time = 20;
+      let userClick = 0;
+      let computer = 10;
+      let user = "You";
+      let comp = "Computer";
+      let roundUser = 0;
+      let roundComp = 0;
+
+      box.addEventListener("click", () => {
+        userClick++;
+        computer -= userClick;
+      });
+
+      button.addEventListener("click", () => {
+        start.style.display = "flex";
+        button.style.display = "none";
+        final.innerHTML = "";
+        result.innerHTML = "<li>The Result:</li>";
+      });
+
+      const createTimer = () => {
+        interval = setInterval(() => {
+          second--;
+          time--;
+
+          let position1 = rand(0, 450);
+          let position2 = rand(0, 430);
+          let number1 = rand(0, 224);
+          let number2 = rand(0, 225);
+          let number3 = rand(0, 225);
+
+          if (second === 0) {
+            result.innerHTML += `
+            <li>The winner
+                ${userClick > computer ? user : comp}, collected 
+                ${userClick > computer ? userClick : computer} 
+                points 
+                </li>`;
+            if (userClick > computer) {
+              roundUser++;
+            } else if (userClick < computer) {
+              roundComp++;
+            } else if (userClick === computer) {
+              roundUser += 0;
+              roundComp += 0;
+            }
+            console.log(roundComp, roundUser);
+            userClick = 0;
+            computer = 10;
+          }
+          if (second === -1) {
+            second = 10;
+          }
+          if (time === -1) {
+            clearInterval(interval);
+
+            start.style.display = "none";
+            button.style.display = "block";
+            button.textContent = "Play again";
+
+            console.log(roundComp, roundUser);
+            if (roundUser > roundComp) {
+              final.innerHTML = `<h3>Congratulations, you win!</h3>`;
+            } else if (roundUser < roundComp) {
+              final.innerHTML = `<h3>The computer won...</h3>`;
+            } else final.innerHTML = `<h3>Draw, try again.</h3>`;
+
+            userClick = 0;
+            computer = 10;
+            roundUser = 0;
+            roundComp = 0;
+            second = 10;
+            time = 20;
+          }
+
+          box.style.marginLeft = `${position1}px`;
+          box.style.marginTop = `${position2}px`;
+          box.style.backgroundColor = `rgb(${number1}, ${number2}, ${number3})`;
+          document.querySelector(".timer").textContent = second;
+
+        }, 1000);
+      };
+
+
+    </script>
+  </body>
+</html>
